@@ -37,8 +37,34 @@ app.use('/bls', function(req, res) {
     //     });
     // });
 
+    var options = {
+        method: 'POST',
+        url: 'https://api.bls.gov/publicAPI/v2/timeseries/data/',
+        headers: {
+            'cache-control': 'no-cache',
+            'content-type': 'application/json'
+        },
+        body: {
+            seriesid: [ 'LAUCN040010000000005', 'LAUCN040010000000006' ],
+            startyear: '2010',
+            endyear: '2012',
+            catalog: false,
+            calculations: true,
+            annualaverage: true,
+            registrationkey: key.bls
+        },
+        json: true
+    };
+
+    request(options, function (error, response, body) {
+        if (error) throw new Error(error);
+
+        console.log(body);
+    });
+
 
 });
+
 
 app.listen(process.env.PORT || 5000);
 
