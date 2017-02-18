@@ -5,3 +5,7 @@
 Start React watcher
    
    `$ npm start`  
+   
+Run server
+   
+   `$ nodemon proxy.js`
