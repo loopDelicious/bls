@@ -1,0 +1,28 @@
+button {
+    background-color: var(--secondary-color);
+    color: var(--tertiary-color);
+    border: 1px solid transparent;
+    font-size: 20px;
+    padding: 7px 15px;
+    cursor: pointer;
+    line-height: 14px;
+    vertical-align: middle;
+    border-radius: 4px;
+}
+
+button:hover {
+    color: var(--main-color);
+}
+
+.radio-buttons {
+    width: 400px;
+    margin: 0 auto;
+}
+
+label {
+    margin-right: 10px;
+}
+
+input[type="radio"] {
+    width: auto;
+}

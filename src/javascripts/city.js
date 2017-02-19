@@ -1,27 +1,28 @@
 import React, {Component} from 'react';
 import $ from 'jquery';
 
-
 class City extends Component {
 
-    host = this.location.window;
+    host = window.location.hostname;
 
-    componentDidMount = () => {
+    state = {
+        startyear: new Date().getFullYear() - 2,
+        endyear: new Date().getFullYear(),
+        seriesid: [ 'LAUCN040010000000005', 'LAUCN040010000000006' ]
+    };
 
-        var startyear;
-        var endyear;
-        var seriesid;
+    handleDisplay = () => {
 
         // POST request
         $.ajax({
-            url: 'http://' + this.host + ':5000/bls',
+            url: 'http://' + this.host + ':4700/bls',
             type: 'post',
-            data: {
-                startyear: startyear,
-                endyear: endyear,
-                seriesid: seriesid
-            },
             contentType: 'application/json',
+            data: JSON.stringify({
+                startyear: this.state.startyear,
+                endyear: this.state.endyear,
+                seriesid: this.state.seriesid
+            }),
             success: (response) => {
                 console.log(response);
             }
@@ -32,7 +33,8 @@ class City extends Component {
 
         return (
             <div className="city-graph">
-
+                <h2>i am city-graph.</h2>
+                <button onClick={this.handleDisplay}>send</button>
             </div>
         )
     };

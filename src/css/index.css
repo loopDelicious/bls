@@ -1,5 +1,10 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: var(--primary-font);
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-family: var(--primary-font);
 }

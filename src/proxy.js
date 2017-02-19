@@ -2,21 +2,26 @@ var express = require('express');
 var request = require('request');
 var key = require('../secrets.js');
 var redis = require('redis');
-var client = redis.createClient();
+// var client = redis.createClient();
+var bodyParser = require('body-parser');
 
 var app = express();
 
 // create a proxy so server side can access indeed API
 
 // allow CORS access
-// from https://blog.javascripting.com/2015/01/17/dont-hassle-with-cors/
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
+    res.header("Content-Type", "application/json");
     next();
 });
 
-app.use('/bls', function(req, res) {
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.post('/bls', function(req, res) {
 
     // var url = '	https://api.bls.gov/publicAPI/v2/timeseries/data/';
     // res.header("Content-Type", "application/json");
@@ -42,12 +47,11 @@ app.use('/bls', function(req, res) {
         url: 'https://api.bls.gov/publicAPI/v2/timeseries/data/',
         headers: {
             'cache-control': 'no-cache',
-            'content-type': 'application/json'
         },
         body: {
-            seriesid: [ 'LAUCN040010000000005', 'LAUCN040010000000006' ],
-            startyear: '2010',
-            endyear: '2012',
+            seriesid: req.body.seriesid,
+            startyear: req.body.startyear,
+            endyear: req.body.endyear,
             catalog: false,
             calculations: true,
             annualaverage: true,
@@ -58,13 +62,11 @@ app.use('/bls', function(req, res) {
 
     request(options, function (error, response, body) {
         if (error) throw new Error(error);
-
-        console.log(body);
+        res.send(body);
     });
-
 
 });
 
 
-app.listen(process.env.PORT || 5000);
+app.listen(process.env.PORT || 4700);
 
