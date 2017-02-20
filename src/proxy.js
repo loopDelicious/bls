@@ -4,6 +4,7 @@ var key = require('../secrets.js');
 var redis = require('redis');
 // var client = redis.createClient();
 var bodyParser = require('body-parser');
+var scraperjs = require('scraperjs');
 
 var app = express();
 
@@ -20,6 +21,28 @@ app.use(function(req, res, next) {
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use('/indeed', function(req, res) {
+
+    var city = req.body.city.join("-"); // receive array of geography join with dashes
+    var occupation = req.body.occupation.join("-"); // receive array of occupation and join with dashes
+
+    console.log('city ', city);
+    console.log('occupation ', occupation);
+    scraperjs.StaticScraper.create('https://www.indeed.com/salaries/' + occupation + '-Salaries,-' + city)
+        .scrape(function($) {
+            return $(".cmp-sal-salary span").map(function() {
+                return $(this).text();
+            }).get();
+        })
+        .then(function(salary) {
+            res.send(salary);
+        });
+// https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-CA
+// https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-Bay-Area-CA
+
+});
+
 
 app.post('/bls', function(req, res) {
 
