@@ -36,37 +36,30 @@ app.post('/indeed', function(req, res) {
         }
 
         // if results are not in redis, fetch from indeed and store in redis
-        request(url, function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                client.setex(url, 3600, body);
-                res.send(body);
-            }
-        });
+        scraperjs.StaticScraper.create(url)
+            .scrape(function ($) {
+
+                var results = [{
+                    salary: $(".cmp-sal-salary span"),
+                    sample: $(".cmp-salary-header-content"),
+                    relative: $(".cmp-sal-average-above"),
+                    min: $(".cmp-sal-min span"),
+                    max: $(".cmp-sal-max span"),
+                }];
+                return results.map(function () {
+                    return $(this).text();
+                }).get();
+                // return $(".cmp-sal-salary span").map(function() {
+                //     return $(this).text();
+                // }).get();
+            })
+            .then(function (salaryData) {
+                client.setex(url, 3600, salaryData);
+                res.send(salaryData);
+            });
     });
 
-    // TODO: setup redis for caching
     // TODO: pull more than just average salary (sample size, relative trend, min, max, etc)
-
-    scraperjs.StaticScraper.create(url)
-        .scrape(function($) {
-
-            var results = [{
-                salary: $(".cmp-sal-salary span"),
-                sample: $(".cmp-salary-header-content"),
-                relative: $(".cmp-sal-average-above"),
-                min: $(".cmp-sal-min span"),
-                max: $(".cmp-sal-max span"),
-            }];
-            return results.map(function() {
-                return $(this).text();
-            }).get();
-            // return $(".cmp-sal-salary span").map(function() {
-            //     return $(this).text();
-            // }).get();
-        })
-        .then(function(salary) {
-            res.send(salary);
-        });
 // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-CA
 // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-Bay-Area-CA
 

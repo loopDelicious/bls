@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import City from './city.js';
+import Graph from './graph.js';
 import Indeed from './indeed.js';
 
 class App extends Component {
@@ -72,13 +73,17 @@ class App extends Component {
                   </tbody>
               </table>
               <hr />
-
-              <h2>BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov.</h2>
-              <City />
-              <Indeed
+              <Graph
                   occupations={this.occupations}
                   locations={this.locations}
+                  results={this.state}
               />
+              {/*<h2>BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov.</h2>*/}
+              {/*<City />*/}
+              {/*<Indeed*/}
+                  {/*occupations={this.occupations}*/}
+                  {/*locations={this.locations}*/}
+              {/*/>*/}
           </div>
         );
   }
