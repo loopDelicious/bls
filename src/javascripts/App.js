@@ -4,11 +4,15 @@ import City from './city.js';
 import Graph from './graph.js';
 import Indeed from './indeed.js';
 
+// Object.prototype.keys = function() {
+//     return Object.keys(this);
+// };
+
 class App extends Component {
 
     host = window.location.hostname;
 
-    // occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer", "Mobile Developer", "Application Developer"];
+    // occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer", "Mobile Developer", "Application Developer", "Integration Engineer"];
     occupations= ["Software Engineer", "Full Stack Developer"];
     // locations = ['Seattle WA', 'San Francisco CA', 'Los Angeles CA', 'Chicago IL', 'Denver CO', 'Austin TX', 'New York City NY', 'Boston MA'];
     locations = ['Seattle WA', 'San Francisco CA'];
@@ -33,7 +37,24 @@ class App extends Component {
                             this.state[occupation] = {}
                         }
 
-                        this.state[occupation][location] = res.salary;
+                        if (!this.state[occupation][location]) {
+                            this.state[occupation][location] = {}
+                        }
+                        if (!this.state[occupation][location].salary) {
+                            this.state[occupation][location].salary = res.salary;
+                        }
+                        if (!this.state[occupation][location].sample) {
+                            this.state[occupation][location].sample = res.sample;
+                        }
+                        if (!this.state[occupation][location].relative) {
+                            this.state[occupation][location].relative = res.relative;
+                        }
+                        if (!this.state[occupation][location].minimum) {
+                            this.state[occupation][location].minimum = res.minimum;
+                        }
+                        if (!this.state[occupation][location].maximum) {
+                            this.state[occupation][location].maximum = res.maximum;
+                        }
                         this.setState(this.state);
                     }
                 });
@@ -49,7 +70,16 @@ class App extends Component {
         var rows = this.occupations.map( (occupation) => {
 
             var salaries = this.locations.map( (location) => {
-                return <td key={'table'+location}>{this.state[occupation] ? this.state[occupation][location] : null}</td>
+                return (
+
+                    <tr>
+                        <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
+                        <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
+                        <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
+                    </tr>
+
+                )
+
             });
 
             return (
@@ -61,6 +91,18 @@ class App extends Component {
         });
         return (
           <div className="App">
+
+              <div id="intro">
+                  <div className="width">
+                      <h2>Tech Salaries by City</h2>
+                      <h3>
+                          <i className="fa fa-medium fa-lg" /> Read on <a href="https://medium.com/@joycelin.codes/always-be-coding-regional-differences-in-programming-languages-9957785dd4e6#.oq7bf9wki">Medium</a>
+                          <span className="spacer"> | </span>
+                          <i className="fa fa-github fa-lg" /> Fork me on <a href="https://github.com/loopDelicious/bls">Github</a>
+                      </h3>
+                  </div>
+              </div>
+
               <table>
                   <thead>
                   <tr>
@@ -74,11 +116,15 @@ class App extends Component {
                   </tbody>
               </table>
               <hr />
-              {/*<Graph*/}
-                  {/*occupations={this.occupations}*/}
-                  {/*locations={this.locations}*/}
-                  {/*results={this.state}*/}
-              {/*/>*/}
+              {Object.keys(this.state).length === 0 ?
+                  null :
+                  <Graph
+                      occupations={this.occupations}
+                      locations={this.locations}
+                      results={this.state}
+                  />
+              }
+
               {/*<h2>BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov.</h2>*/}
               {/*<City />*/}
               {/*<Indeed*/}

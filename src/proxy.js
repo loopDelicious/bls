@@ -48,10 +48,10 @@ app.post('/indeed', function(req, res) {
                 relative: $(".cmp-sal-average-above").map(function() {
                     return $(this).text();
                 }).get(),
-                min: $(".cmp-sal-min span").first().map(function() {
+                minimum: $(".cmp-sal-min span").first().map(function() {
                     return $(this).text();
                 }).get(),
-                max: $(".cmp-sal-max span").first().map(function() {
+                maximum: $(".cmp-sal-max span").first().map(function() {
                     return $(this).text();
                 }).get(),
             };
