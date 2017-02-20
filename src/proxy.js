@@ -28,38 +28,40 @@ app.post('/indeed', function(req, res) {
     var occupation = req.body.occupation.join("-"); // receive array of occupation and join with dashes
     var url = 'https://www.indeed.com/salaries/' + occupation + '-Salaries,-' + city;
 
-    // check if results are in redis
-    client.get(url, function (err, data) {
-        if (data) {
-            res.send(data);
-            return;
-        }
+    // // check if results are in redis -- TODO for dev turn off
+    // client.get(url, function (err, data) {
+    //     if (data) {
+    //         res.send(data);
+    //         return;
+    //     }
 
-        // if results are not in redis, fetch from indeed and store in redis
-        scraperjs.StaticScraper.create(url)
-            .scrape(function ($) {
-
-                var results = [{
-                    salary: $(".cmp-sal-salary span"),
-                    sample: $(".cmp-salary-header-content"),
-                    relative: $(".cmp-sal-average-above"),
-                    min: $(".cmp-sal-min span"),
-                    max: $(".cmp-sal-max span"),
-                }];
-                return results.map(function () {
+    // if results are not in redis, fetch from indeed and store in redis
+    scraperjs.StaticScraper.create(url)
+        .scrape(function ($) {
+            return {
+                salary: $(".cmp-sal-salary span").map(function() {
                     return $(this).text();
-                }).get();
-                // return $(".cmp-sal-salary span").map(function() {
-                //     return $(this).text();
-                // }).get();
-            })
-            .then(function (salaryData) {
-                client.setex(url, 3600, salaryData);
-                res.send(salaryData);
+                }).get(),
+                sample: $(".cmp-salary-header-content").map(function() {
+                    return $(this).text();
+                }).get(),
+                relative: $(".cmp-sal-average-above").map(function() {
+                    return $(this).text();
+                }).get(),
+                min: $(".cmp-sal-min span").first().map(function() {
+                    return $(this).text();
+                }).get(),
+                max: $(".cmp-sal-max span").first().map(function() {
+                    return $(this).text();
+                }).get(),
+            };
+        })
+        .then(function (salaryData) {
+            console.log('salaryData ', salaryData);
+            // client.setex(url, 3600, salaryData);
+            res.send(salaryData);
             });
-    });
-
-    // TODO: pull more than just average salary (sample size, relative trend, min, max, etc)
+    // });
 // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-CA
 // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-Bay-Area-CA
 

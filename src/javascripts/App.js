@@ -8,7 +8,7 @@ class App extends Component {
 
     host = window.location.hostname;
 
-    // occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer"];
+    // occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer", "Mobile Developer", "Application Developer"];
     occupations= ["Software Engineer", "Full Stack Developer"];
     // locations = ['Seattle WA', 'San Francisco CA', 'Los Angeles CA', 'Chicago IL', 'Denver CO', 'Austin TX', 'New York City NY', 'Boston MA'];
     locations = ['Seattle WA', 'San Francisco CA'];
@@ -28,11 +28,12 @@ class App extends Component {
                         location: location.split(" ")
                     }),
                     success: (res) => {
+                        console.log(res);
                         if (!this.state[occupation]) {
                             this.state[occupation] = {}
                         }
-                        this.state[occupation][location] = res.salary;
 
+                        this.state[occupation][location] = res.salary;
                         this.setState(this.state);
                     }
                 });
@@ -73,11 +74,11 @@ class App extends Component {
                   </tbody>
               </table>
               <hr />
-              <Graph
-                  occupations={this.occupations}
-                  locations={this.locations}
-                  results={this.state}
-              />
+              {/*<Graph*/}
+                  {/*occupations={this.occupations}*/}
+                  {/*locations={this.locations}*/}
+                  {/*results={this.state}*/}
+              {/*/>*/}
               {/*<h2>BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov.</h2>*/}
               {/*<City />*/}
               {/*<Indeed*/}
