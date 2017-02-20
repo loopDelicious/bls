@@ -5,8 +5,12 @@ import Indeed from './indeed.js';
 
 class App extends Component {
 
-    occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer"];
-    locations = ['Seattle', 'San Francisco', 'Los Angeles', 'Chicago', 'Denver', 'Austin', 'New York City', 'Boston'];
+    host = window.location.hostname;
+
+    // occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer"];
+    occupations= ["Software Engineer", "Full Stack Developer"];
+    // locations = ['Seattle WA', 'San Francisco CA', 'Los Angeles CA', 'Chicago IL', 'Denver CO', 'Austin TX', 'New York City NY', 'Boston MA'];
+    locations = ['Seattle WA', 'San Francisco CA'];
 
     state = {};
 
@@ -15,17 +19,18 @@ class App extends Component {
         this.occupations.forEach( (occupation) => {
             this.locations.forEach( (location) => {
                 $.ajax({
-                    url: '/indeed', // talk to server on current page host at port 4700
-                    method: 'get',
-                    data: {
+                    url: 'http://' + this.host + ':4700/indeed', // talk to server on current page host at port 4700
+                    method: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
                         occupation: occupation.split(" "),
                         location: location.split(" ")
-                    },
+                    }),
                     success: (res) => {
                         if (!this.state[occupation]) {
                             this.state[occupation] = {}
                         }
-                        this.state[occupation][location] = res.totalResults;
+                        this.state[occupation][location] = res.salary;
 
                         this.setState(this.state);
                     }

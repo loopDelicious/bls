@@ -2,7 +2,7 @@ var express = require('express');
 var request = require('request');
 var key = require('../secrets.js');
 var redis = require('redis');
-// var client = redis.createClient();
+var client = redis.createClient();
 var bodyParser = require('body-parser');
 var scraperjs = require('scraperjs');
 
@@ -22,18 +22,47 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/indeed', function(req, res) {
+app.post('/indeed', function(req, res) {
 
-    var city = req.body.city.join("-"); // receive array of geography join with dashes
+    var city = req.body.location.join("-"); // receive array of geography join with dashes
     var occupation = req.body.occupation.join("-"); // receive array of occupation and join with dashes
+    var url = 'https://www.indeed.com/salaries/' + occupation + '-Salaries,-' + city;
 
-    console.log('city ', city);
-    console.log('occupation ', occupation);
-    scraperjs.StaticScraper.create('https://www.indeed.com/salaries/' + occupation + '-Salaries,-' + city)
+    // check if results are in redis
+    client.get(url, function (err, data) {
+        if (data) {
+            res.send(data);
+            return;
+        }
+
+        // if results are not in redis, fetch from indeed and store in redis
+        request(url, function (error, response, body) {
+            if (!error && response.statusCode == 200) {
+                client.setex(url, 3600, body);
+                res.send(body);
+            }
+        });
+    });
+
+    // TODO: setup redis for caching
+    // TODO: pull more than just average salary (sample size, relative trend, min, max, etc)
+
+    scraperjs.StaticScraper.create(url)
         .scrape(function($) {
-            return $(".cmp-sal-salary span").map(function() {
+
+            var results = [{
+                salary: $(".cmp-sal-salary span"),
+                sample: $(".cmp-salary-header-content"),
+                relative: $(".cmp-sal-average-above"),
+                min: $(".cmp-sal-min span"),
+                max: $(".cmp-sal-max span"),
+            }];
+            return results.map(function() {
                 return $(this).text();
             }).get();
+            // return $(".cmp-sal-salary span").map(function() {
+            //     return $(this).text();
+            // }).get();
         })
         .then(function(salary) {
             res.send(salary);
