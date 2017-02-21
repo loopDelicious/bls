@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-var BarChart = require("react-chartjs").Bar;
+var Chart = require('chart.js');
 import Legend from './legend.js';
 
 class Graph extends Component {
+
+    chart = null;
 
     componentDidMount = () => {
         var legend = this.refs.chart.getChart().generateLegend();
@@ -10,11 +12,7 @@ class Graph extends Component {
         this.setState({
             legend: legend
         });
-    };
 
-    render() {
-
-        console.log(this.props.results);
         var legend = this.state && this.state.legend || '';
 
         var seattle = this.props.occupations.map( (occupation) => {
@@ -124,19 +122,26 @@ class Graph extends Component {
             responsive: true,
         };
 
+        this.chart = new Chart(this.refs.myChart, {
+            type: 'bar',
+            data: chartData,
+            options: chartOptions
+        });
+
+    };
+
+    render() {
+
+
         return (
             <div className="bar graph clearfix">
                 <h2>Tech Salaries by City</h2>
-                <BarChart
-                    ref="chart"
-                    data={chartData}
-                    options={chartOptions}
-                />
-                <Legend
-                    data={chartData}
-                    title="city-occupations"
-                    dangerouslySetInnerHTML={{ __html: legend }}
-                />
+                <canvas ref="myChart" width="400" height="400" />
+                {/*<Legend*/}
+                    {/*data={chartData}*/}
+                    {/*title="city-occupations"*/}
+                    {/*dangerouslySetInnerHTML={{ __html: legend }}*/}
+                {/*/>*/}
             </div>
         )
     };

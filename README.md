@@ -4,7 +4,7 @@
 
 Start React watcher
    
-   `$ npm start`  
+   `$ yarn start`  
    
 Run server
    

@@ -32,11 +32,9 @@ class App extends Component {
                         location: location.split(" ")
                     }),
                     success: (res) => {
-                        console.log(res);
                         if (!this.state[occupation]) {
                             this.state[occupation] = {}
                         }
-
                         if (!this.state[occupation][location]) {
                             this.state[occupation][location] = {}
                         }
@@ -67,23 +65,32 @@ class App extends Component {
             return <td key={location}>{location}</td>;
         });
 
-        var rows = this.occupations.map( (occupation) => {
+        var rows = this.occupations.map( (occupation, i) => {
 
-            var salaries = this.locations.map( (location) => {
+            var salaries = this.locations.map( (location, index) => {
                 return (
-
-                    <tr>
-                        <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
-                        <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
-                        <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
-                    </tr>
+                    <td key={location + index}>
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td className="min-salary">{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].minimum : null}</td>
+                                <td className="average-salary">{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
+                                <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].maximum : null}</td>
+                            </tr>
+                            <tr>
+                            <td />
+                            <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].relative : null}</td>
+                            <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].sample : null}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
 
                 )
-
             });
 
             return (
-                <tr key={occupation}>
+                <tr key={occupation + i}>
                     <td>{occupation}</td>
                     {salaries}
                 </tr>

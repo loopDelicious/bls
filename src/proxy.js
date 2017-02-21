@@ -57,7 +57,7 @@ app.post('/indeed', function(req, res) {
             };
         })
         .then(function (salaryData) {
-            console.log('salaryData ', salaryData);
+            // console.log('salaryData ', salaryData);
             // client.setex(url, 3600, salaryData);
             res.send(salaryData);
             });
