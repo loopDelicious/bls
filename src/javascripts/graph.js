@@ -122,6 +122,8 @@ class Graph extends Component {
             responsive: true,
         };
 
+
+        // TODO: update chart data to chart.js format (vs. react-chartjs)
         this.chart = new Chart(this.refs.myChart, {
             type: 'bar',
             data: chartData,
