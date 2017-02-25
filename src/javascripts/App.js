@@ -68,19 +68,22 @@ class App extends Component {
         var rows = this.occupations.map( (occupation, i) => {
 
             var salaries = this.locations.map( (location, index) => {
+
                 return (
                     <td key={location + index}>
-                        <table>
+                        <table className="embedded-table">
                             <tbody>
                             <tr>
-                                <td className="min-salary">{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].minimum : null}</td>
-                                <td className="average-salary">{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
-                                <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].maximum : null}</td>
+                                <td className="min-salary">min {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].minimum : null}</td>
+                                <td className="average-salary">avg {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
+                                <td className="max-salary">max {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].maximum : null}</td>
+                                <td />
                             </tr>
                             <tr>
                             <td />
                             <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].relative : null}</td>
-                            <td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].sample : null}</td>
+                            <td />
+                            <td>sample size {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].sample[0].split(" ")[3] : null}</td>
                             </tr>
                             </tbody>
                         </table>

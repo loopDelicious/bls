@@ -97,20 +97,25 @@ td:first-child {
   font-size: 12px;
 }
 
-.min-salary {
+.embedded-table .min-salary {
+    font-weight: normal;
+}
+
+.embedded-table .max-salary {
     font-weight: normal;
 }
 
 .average-salary {
     font-weight: bold;
     font-size: 12px;
+    color: var(--secondary-color);
 }
 
 tr:hover {
   background-color: var(--tertiary-color);
 }
 
-tr:nth-child(even) {
+.embedded-table tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
