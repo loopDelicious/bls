@@ -10,7 +10,7 @@ class Legend extends Component {
         var datasets = this.props.data.datasets.map( (ds) => {
             return (
                 <li key={ds.label}>
-                    <div className="legend-color-box" style={{ backgroundColor: ds.strokeColor }} ></div>
+                    <div className="legend-color-box" style={{ backgroundColor: ds.borderColor }} ></div>
                     { ds.label }
                 </li>
             );

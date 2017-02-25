@@ -40,83 +40,146 @@ class Graph extends Component {
             return this.props.results['Boston'] ? this.props.results['Boston'][occupation] : null
         });
 
+        // var data = {
+        //     labels: ["January", "February", "March", "April", "May", "June", "July"],
+        //     datasets: [
+        //         {
+        //             label: "My First dataset",
+        //             fill: false,
+        //             lineTension: 0.1,
+        //             backgroundColor: "rgba(75,192,192,0.4)",
+        //             borderColor: "rgba(75,192,192,1)",
+        //             borderCapStyle: 'butt',
+        //             borderDash: [],
+        //             borderDashOffset: 0.0,
+        //             borderJoinStyle: 'miter',
+        //             pointBorderColor: "rgba(75,192,192,1)",
+        //             pointBackgroundColor: "#fff",
+        //             pointBorderWidth: 1,
+        //             pointHoverRadius: 5,
+        //             pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        //             pointHoverBorderColor: "rgba(220,220,220,1)",
+        //             pointHoverBorderWidth: 2,
+        //             pointRadius: 1,
+        //             pointHitRadius: 10,
+        //             data: [65, 59, 80, 81, 56, 55, 40],
+        //             spanGaps: false,
+        //         }
+        //     ]
+        // };
+
         var chartData = {
             labels: this.props.occupations,
-            type: 'line',
             datasets: [{
                 label: "Seattle",
-                fillColor: "rgba(153,255,51,0.4)",
-                strokeColor: "rgba(153,255,51,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                lineTension: 0.1,
+                backgroundColor: "rgba(153,255,51,0.4)",
+                borderColor: "rgba(153,255,51,1)",
+                pointBorderColor: "rgba(220,220,220,1)",
+                pointBackgroundColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
                 data: seattle
             }, {
                 label: "San Francisco",
-                fillColor: "rgba(0,206,209,0.4)",
-                strokeColor: "rgba(0,206,209,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                lineTension: 0.1,
+                backgroundColor: "rgba(0,206,209,0.4)",
+                borderColor: "rgba(0,206,209,1)",
+                pointBorderColor: "rgba(220,220,220,1)",
+                pointBackgroundColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
                 data: sanfrancisco
             }, {
                 label: "Los Angeles",
-                fillColor: "rgba(255,215,0,0.4)",
-                strokeColor: "rgba(255,215,0,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                lineTension: 0.1,
+                backgroundColor: "rgba(255,215,0,0.4)",
+                borderColor: "rgba(255,215,0,1)",
+                pointBorderColor: "rgba(220,220,220,1)",
+                pointBackgroundColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
                 data: losangeles
             }, {
                 label: "Chicago",
-                fillColor: "rgba(255,50,147,0.4)",
-                strokeColor: "rgba(255,50,147,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                lineTension: 0.1,
+                backgroundColor: "rgba(255,50,147,0.4)",
+                borderColor: "rgba(255,50,147,1)",
+                pointBorderColor: "rgba(220,220,220,1)",
+                pointBackgroundColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
                 data: chicago
             }, {
                 label: "Denver",
-                fillColor: "rgba(153,50,204,0.4)",
-                strokeColor: "rgba(153,50,204,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                lineTension: 0.1,
+                backgroundColor: "rgba(153,50,204,0.4)",
+                borderColor: "rgba(153,50,204,1)",
+                pointBorderColor: "rgba(220,220,220,1)",
+                pointBackgroundColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
                 data: denver
             }, {
                 label: "Austin",
-                fillColor: "rgba(255,153,0,0.4)",
-                strokeColor: "rgba(255,153,0,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                lineTension: 0.1,
+                backgroundColor: "rgba(255,153,0,0.4)",
+                borderColor: "rgba(255,153,0,1)",
+                pointBorderColor: "rgba(220,220,220,1)",
+                pointBackgroundColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
                 data: austin
             }, {
                 label: "New York City",
-                fillColor: "rgba(218,112,214,0.4)",
-                strokeColor: "rgba(218,112,214,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                lineTension: 0.1,
+                backgroundColor: "rgba(218,112,214,0.4)",
+                borderColor: "rgba(218,112,214,1)",
+                pointBorderColor: "rgba(220,220,220,1)",
+                pointBackgroundColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
                 data: newyorkcity
             }, {
                 label: "Boston",
-                fillColor: "rgba(0,0,255,0.4)",
-                strokeColor: "rgba(0,0,255,1)",
-                pointColor: "rgba(220,220,220,1)",
-                pointStrokeColor: "#fff",
-                pointHighlightFill: "#fff",
-                pointHighlightStroke: "rgba(220,220,220,1)",
+                lineTension: 0.1,
+                backgroundColor: "rgba(0,0,255,0.4)",
+                borderColor: "rgba(0,0,255,1)",
+                pointBorderColor: "rgba(220,220,220,1)",
+                pointBackgroundColor: "#fff",
+                pointHoverBackgroundColor: "#fff",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
                 data: boston
             }]
         };
+
+        // var chartData = {
+        //     labels: this.props.occupation,
+        //     datasets: [
+        //         {
+        //             label: "My First dataset",
+        //             fill: false,
+        //             lineTension: 0.1,
+        //             backgroundColor: "rgba(75,192,192,0.4)",
+        //             borderColor: "rgba(75,192,192,1)",
+        //             borderCapStyle: 'butt',
+        //             borderDash: [],
+        //             borderDashOffset: 0.0,
+        //             borderJoinStyle: 'miter',
+        //             pointBorderColor: "rgba(75,192,192,1)",
+        //             pointBackgroundColor: "#fff",
+        //             pointBorderWidth: 1,
+        //             pointHoverRadius: 5,
+        //             pointHoverBackgroundColor: "rgba(75,192,192,1)",
+        //             pointHoverBorderColor: "rgba(220,220,220,1)",
+        //             pointHoverBorderWidth: 2,
+        //             pointRadius: 1,
+        //             pointHitRadius: 10,
+        //             data: [seattle, sanfrancisco, losangeles, chicago, denver, austin, newyorkcity, boston],
+        //             spanGaps: false,
+        //         }
+        //     ]
+        // };
 
         var chartOptions = {
             responsive: true,
@@ -125,7 +188,7 @@ class Graph extends Component {
 
         // TODO: update chart data to chart.js format (vs. react-chartjs)
         this.chart = new Chart(this.refs.myChart, {
-            type: 'bar',
+            type: 'line',
             data: chartData,
             options: chartOptions
         });
