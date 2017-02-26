@@ -15,7 +15,7 @@ class App extends Component {
     // occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer", "Mobile Developer", "Application Developer", "Integration Engineer"];
     occupations= ["Software Engineer", "Full Stack Developer"];
     // locations = ['Seattle WA', 'San Francisco CA', 'Los Angeles CA', 'Chicago IL', 'Denver CO', 'Austin TX', 'New York City NY', 'Boston MA'];
-    locations = ['Seattle WA', 'San Francisco CA'];
+    locations = ['Seattle WA', 'San Francisco CA', 'Chicago IL', 'Denver CO', 'Austin TX'];
 
     state = {};
 
@@ -62,7 +62,7 @@ class App extends Component {
 
     render() {
         var columnHeaders = this.locations.map( (location) => {
-            return <td key={location}>{location}</td>;
+            return <td className="location-header" key={location}>{location}</td>;
         });
 
         var rows = this.occupations.map( (occupation, i) => {
@@ -94,7 +94,7 @@ class App extends Component {
 
             return (
                 <tr key={occupation + i}>
-                    <td>{occupation}</td>
+                    <td className="occupation-row">{occupation}</td>
                     {salaries}
                 </tr>
             )
@@ -112,35 +112,37 @@ class App extends Component {
                       </h3>
                   </div>
               </div>
+              <div className="width">
+                  <p>Salary estimated from employees, users, and past and present job advertisements on Indeed in the past 12 months.</p>
+                  <table>
+                      <thead>
+                      <tr>
+                          <td />
+                          {columnHeaders}
+                      </tr>
+                      </thead>
 
-              <table>
-                  <thead>
-                  <tr>
-                      <td />
-                      {columnHeaders}
-                  </tr>
-                  </thead>
+                      <tbody>
+                      {rows}
+                      </tbody>
+                  </table>
 
-                  <tbody>
-                  {rows}
-                  </tbody>
-              </table>
-              <hr />
-              {Object.keys(this.state).length === 0 ?
-                  null :
-                  <Graph
-                      occupations={this.occupations}
-                      locations={this.locations}
-                      results={this.state}
-                  />
-              }
-
-              {/*<h2>BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov.</h2>*/}
-              {/*<City />*/}
-              {/*<Indeed*/}
-                  {/*occupations={this.occupations}*/}
-                  {/*locations={this.locations}*/}
-              {/*/>*/}
+                  <hr />
+                  {Object.keys(this.state).length === 0 ?
+                      null :
+                      <Graph
+                          occupations={this.occupations}
+                          locations={this.locations}
+                          results={this.state}
+                      />
+                  }
+                  {/*<h2>BLS.gov cannot vouch for the data or analyses derived from these data after the data have been retrieved from BLS.gov.</h2>*/}
+                  {/*<City />*/}
+                  {/*<Indeed*/}
+                      {/*occupations={this.occupations}*/}
+                      {/*locations={this.locations}*/}
+                  {/*/>*/}
+              </div>
           </div>
         );
   }
