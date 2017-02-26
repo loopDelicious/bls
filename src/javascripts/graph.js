@@ -47,7 +47,7 @@ class Graph extends Component {
             datasets: [
                 {
                     type: 'bar',
-                    label: this.state.occupation,
+                    label: 'minimum for ' + this.state.occupation,
                     backgroundColor: 'rgba(0, 0, 0, 0)',
                     borderColor: 'rgba(0, 0, 0, 0)',
                     borderWidth: 1,
@@ -55,7 +55,7 @@ class Graph extends Component {
                 },
                 {
                     type: 'bar',
-                    label: this.state.occupation,
+                    label: 'maximum for ' + this.state.occupation,
                     backgroundColor: [
                         'rgba(153,255,51, 0.2)',
                         'rgba(0,206,209, 0.2)',
@@ -81,7 +81,7 @@ class Graph extends Component {
                 },
                 {
                     type: 'line',
-                    label: this.state.occupation,
+                    label: 'average for ' + this.state.occupation,
                     fill: false,
                     borderColor: "black",
                     borderWidth: 1,
@@ -96,6 +96,13 @@ class Graph extends Component {
             options: {
                 legend: {
                     display: false,
+                },
+                tooltips: {
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    titleMarginBottom: 10,
+                    bodySpacing: 10,
+                    xPadding: 10,
+                    yPadding: 10,
                 },
                 scales: {
                     yAxes: [{
@@ -116,7 +123,7 @@ class Graph extends Component {
 
         return (
             <div className="bar graph clearfix">
-                <h2>Displaying the average annual salary for: </h2>
+                <h2>Displaying the average annual salary (USD) for: </h2>
                 <select className="title-selection" value={this.state.occupation} onChange={this.handleSelection.bind(this)}>
                     { this.props.occupations.map( (occupation) => {
                         return <option key={occupation} value={occupation}>{occupation} </option>

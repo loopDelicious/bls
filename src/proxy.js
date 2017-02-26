@@ -28,12 +28,12 @@ app.post('/indeed', function(req, res) {
     var occupation = req.body.occupation.join("-"); // receive array of occupation and join with dashes
     var url = 'https://www.indeed.com/salaries/' + occupation + '-Salaries,-' + city;
 
-    // // check if results are in redis -- TODO for dev turn off
-    // client.get(url, function (err, data) {
-    //     if (data) {
-    //         res.send(data);
-    //         return;
-    //     }
+    // check if results are in redis -- for dev turn off
+    client.get(url, function (err, data) {
+        if (data) {
+            res.send(data);
+            return;
+        }
 
     // if results are not in redis, fetch from indeed and store in redis
     scraperjs.StaticScraper.create(url)
@@ -57,16 +57,14 @@ app.post('/indeed', function(req, res) {
             };
         })
         .then(function (salaryData) {
-            // console.log('salaryData ', salaryData);
-            // client.setex(url, 3600, salaryData);
-            res.send(salaryData);
-            });
-    // });
-// https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-CA
-// https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-Bay-Area-CA
-
+            var data = JSON.stringify(salaryData);
+            client.setex(url, 21600, data);
+            res.send(data);
+        });
+    });
+    // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-CA
+    // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-Bay-Area-CA
 });
-
 
 app.post('/bls', function(req, res) {
 

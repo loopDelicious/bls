@@ -12,10 +12,10 @@ class App extends Component {
 
     host = window.location.hostname;
 
-    // occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer", "Mobile Developer", "Application Developer", "Integration Engineer"];
-    occupations= ["Software Engineer", "Full Stack Developer"];
-    // locations = ['Seattle WA', 'San Francisco CA', 'Los Angeles CA', 'Chicago IL', 'Denver CO', 'Austin TX', 'New York City NY', 'Boston MA'];
-    locations = ['Seattle WA', 'San Francisco CA', 'Chicago IL', 'Denver CO', 'Austin TX'];
+    occupations= ["Software Engineer", "Software Developer", "Web Developer", "Front End Developer", "Back End Developer", "Full Stack Developer", "Mobile Developer", "Application Developer", "Integration Engineer"];
+    // occupations= ["Software Engineer", "Full Stack Developer"]; // for testing
+    locations = ['Seattle WA', 'San Francisco CA', 'Los Angeles CA', 'Chicago IL', 'Denver CO', 'Austin TX', 'New York City NY', 'Boston MA'];
+    // locations = ['Seattle WA', 'San Francisco CA']; // for testing
 
     state = {};
 
@@ -75,14 +75,14 @@ class App extends Component {
                             <tbody>
                             <tr>
                                 <td className="salaries min-salary">min {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].minimum : null}</td>
-                                <td className="salaries average-salary">avg {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
                                 <td className="salaries max-salary">max {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].maximum : null}</td>
+                                <td className="salaries">sample {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].sample[0].split(" ")[3] : null}</td>
                             </tr>
                             <tr>
                             <td />
                             <td />
                             {/*<td>{this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].relative : null}</td>*/}
-                            <td>sample size {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].sample[0].split(" ")[3] : null}</td>
+                            <td className="salaries average-salary">avg {this.state[occupation] && this.state[occupation][location] ? this.state[occupation][location].salary : null}</td>
                             </tr>
                             </tbody>
                         </table>
