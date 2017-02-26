@@ -119,7 +119,7 @@ class Graph extends Component {
                 <h2>Displaying the average annual salary for: </h2>
                 <select className="title-selection" value={this.state.occupation} onChange={this.handleSelection.bind(this)}>
                     { this.props.occupations.map( (occupation) => {
-                        return <option key={occupation} value={occupation}>{occupation}</option>
+                        return <option key={occupation} value={occupation}>{occupation} </option>
                     })
                     }
                 </select>
