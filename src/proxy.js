@@ -24,43 +24,76 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.post('/indeed', function(req, res) {
 
-    var city = req.body.location.join("-"); // receive array of geography join with dashes
-    var occupation = req.body.occupation.join("-"); // receive array of occupation and join with dashes
-    var url = 'https://www.indeed.com/salaries/' + occupation + '-Salaries,-' + city;
+    var cities = req.body.locations;
+    var occupations = req.body.occupations;
+    var cityAndOccupations = cities.map( (city) => {
+        return occupations.map( (occupation) => {
+            return {
+                location: city,
+                occupation: occupation,
+                url: 'https://www.indeed.com/salaries/' + occupation.replace(/ /g, "-") + '-Salaries,-' + city.replace(/ /g, "-")
+            };
+            // use regex to look for spaces in occupation and city and replace with dash
+        });
+    });
 
-    // check if results are in redis -- for dev turn off
-    client.get(url, function (err, data) {
-        if (data) {
+    // console.log(cityAndOccupations);
+    //
+    // var urls = cityAndOccupations.map( (cityCluster) => {
+    //     return cityCluster.reduce( (occCluster) => {
+    //         return occCluster.url;
+    //     });
+    // });
+
+    var urls = [].concat.apply([], cityAndOccupations.map((cluster) => {
+        return cluster.url;
+    }));
+    console.log(' urls ', urls);
+
+    // var urls = [].concat.apply([], cityAndOccupations); // return a single array of urls
+
+    // check if results are in redis using mget to bundle redis queries -- for dev turn off
+    client.mget(urls, function (err, data) {
+        if (data.indexOf(null) === -1) {
+            console.log('return whole dataset');
             res.send(data);
             return;
         }
-
-    // if results are not in redis, fetch from indeed and store in redis
-    scraperjs.StaticScraper.create(url)
-        .scrape(function ($) {
-            return {
-                salary: $(".cmp-sal-salary span").map(function() {
-                    return $(this).text();
-                }).get(),
-                sample: $(".cmp-salary-header-content").map(function() {
-                    return $(this).text();
-                }).get(),
-                relative: $(".cmp-sal-average-above").map(function() {
-                    return $(this).text();
-                }).get(),
-                minimum: $(".cmp-sal-min span").first().map(function() {
-                    return $(this).text();
-                }).get(),
-                maximum: $(".cmp-sal-max span").first().map(function() {
-                    return $(this).text();
-                }).get(),
-            };
-        })
-        .then(function (salaryData) {
-            var data = JSON.stringify(salaryData);
-            client.setex(url, 21600, data);
-            res.send(data);
+        console.log(data);
+        var responseData;
+        data.forEach( (datum, i) => {
+            // if results are not in redis, fetch from indeed and store in redis
+            if (datum === null) {
+                console.log('run scraper on this ', urls[i]);
+                scraperjs.StaticScraper.create(urls[i])
+                    .scrape(function ($) {
+                        return {
+                            salary: $(".cmp-sal-salary span").map(function() {
+                                return $(this).text();
+                            }).get(),
+                            sample: $(".cmp-salary-header-content").map(function() {
+                                return $(this).text();
+                            }).get(),
+                            relative: $(".cmp-sal-average-above").map(function() {
+                                return $(this).text();
+                            }).get(),
+                            minimum: $(".cmp-sal-min span").first().map(function() {
+                                return $(this).text();
+                            }).get(),
+                            maximum: $(".cmp-sal-max span").first().map(function() {
+                                return $(this).text();
+                            }).get(),
+                        };
+                    })
+                    .then(function (salaryData) {
+                        var newData = JSON.stringify(salaryData);
+                        client.setex(urls[i], 21600, newData);
+                        console.log('set ', urls[i]);
+                        console.log('newData ', newData);
+                    });
+            }
         });
+        res.send(responseData);
     });
     // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-CA
     // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-Bay-Area-CA

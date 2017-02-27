@@ -21,43 +21,39 @@ class App extends Component {
 
     componentDidMount = () => {
 
-        this.occupations.forEach( (occupation) => {
-            this.locations.forEach( (location) => {
-                $.ajax({
-                    url: 'http://' + this.host + ':4700/indeed', // talk to server on current page host at port 4700
-                    method: 'post',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        occupation: occupation.split(" "),
-                        location: location.split(" ")
-                    }),
-                    success: (res) => {
-                        if (!this.state[occupation]) {
-                            this.state[occupation] = {}
-                        }
-                        if (!this.state[occupation][location]) {
-                            this.state[occupation][location] = {}
-                        }
-                        if (!this.state[occupation][location].salary) {
-                            this.state[occupation][location].salary = res.salary;
-                        }
-                        if (!this.state[occupation][location].sample) {
-                            this.state[occupation][location].sample = res.sample;
-                        }
-                        if (!this.state[occupation][location].relative) {
-                            this.state[occupation][location].relative = res.relative;
-                        }
-                        if (!this.state[occupation][location].minimum) {
-                            this.state[occupation][location].minimum = res.minimum;
-                        }
-                        if (!this.state[occupation][location].maximum) {
-                            this.state[occupation][location].maximum = res.maximum;
-                        }
-                        this.setState(this.state);
-                    }
-                });
-            })
-        })
+        $.ajax({
+            url: 'http://' + this.host + ':4700/indeed', // talk to server on current page host at port 4700
+            method: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                occupations: this.occupations,
+                locations: this.locations
+            }),
+            success: (res) => {
+                if (!this.state[occupation]) {
+                    this.state[occupation] = {}
+                }
+                if (!this.state[occupation][location]) {
+                    this.state[occupation][location] = {}
+                }
+                if (!this.state[occupation][location].salary) {
+                    this.state[occupation][location].salary = res.salary;
+                }
+                if (!this.state[occupation][location].sample) {
+                    this.state[occupation][location].sample = res.sample;
+                }
+                if (!this.state[occupation][location].relative) {
+                    this.state[occupation][location].relative = res.relative;
+                }
+                if (!this.state[occupation][location].minimum) {
+                    this.state[occupation][location].minimum = res.minimum;
+                }
+                if (!this.state[occupation][location].maximum) {
+                    this.state[occupation][location].maximum = res.maximum;
+                }
+                this.setState(this.state);
+            }
+        });
     };
 
     render() {
