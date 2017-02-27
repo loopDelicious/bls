@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import City from './city.js';
+// import City from './city.js';
 import Graph from './graph.js';
 import Indeed from './indeed.js';
 
@@ -30,27 +30,31 @@ class App extends Component {
                 locations: this.locations
             }),
             success: (res) => {
-                if (!this.state[occupation]) {
-                    this.state[occupation] = {}
-                }
-                if (!this.state[occupation][location]) {
-                    this.state[occupation][location] = {}
-                }
-                if (!this.state[occupation][location].salary) {
-                    this.state[occupation][location].salary = res.salary;
-                }
-                if (!this.state[occupation][location].sample) {
-                    this.state[occupation][location].sample = res.sample;
-                }
-                if (!this.state[occupation][location].relative) {
-                    this.state[occupation][location].relative = res.relative;
-                }
-                if (!this.state[occupation][location].minimum) {
-                    this.state[occupation][location].minimum = res.minimum;
-                }
-                if (!this.state[occupation][location].maximum) {
-                    this.state[occupation][location].maximum = res.maximum;
-                }
+
+                console.log(res);
+                res.forEach( (cityAndOccupation) => {
+                    if (!this.state[cityAndOccupation.occupation]) {
+                        this.state[cityAndOccupation.occupation] = {}
+                    }
+                    if (!this.state[cityAndOccupation.occupation][cityAndOccupation.location]) {
+                        this.state[cityAndOccupation.occupation][cityAndOccupation.location] = {}
+                    }
+                    if (!this.state[cityAndOccupation.occupation][cityAndOccupation.location].salary) {
+                        this.state[cityAndOccupation.occupation][cityAndOccupation.location].salary = JSON.parse(cityAndOccupation.data).salary;
+                    }
+                    if (!this.state[cityAndOccupation.occupation][cityAndOccupation.location].sample) {
+                        this.state[cityAndOccupation.occupation][cityAndOccupation.location].sample = JSON.parse(cityAndOccupation.data).sample;
+                    }
+                    if (!this.state[cityAndOccupation.occupation][cityAndOccupation.location].relative) {
+                        this.state[cityAndOccupation.occupation][cityAndOccupation.location].relative = JSON.parse(cityAndOccupation.data).relative;
+                    }
+                    if (!this.state[cityAndOccupation.occupation][cityAndOccupation.location].minimum) {
+                        this.state[cityAndOccupation.occupation][cityAndOccupation.location].minimum = JSON.parse(cityAndOccupation.data).minimum;
+                    }
+                    if (!this.state[cityAndOccupation.occupation][cityAndOccupation.location].maximum) {
+                        this.state[cityAndOccupation.occupation][cityAndOccupation.location].maximum = JSON.parse(cityAndOccupation.data).maximum;
+                    }
+                });
                 this.setState(this.state);
             }
         });
@@ -123,7 +127,7 @@ class App extends Component {
                   </table>
 
                   <hr />
-                  {Object.keys(this.state).length === 0 ?
+                  {Object.keys(this.state).length === (this.occupations.length * this.locations.length) ?
                       null :
                       <Graph
                           occupations={this.occupations}

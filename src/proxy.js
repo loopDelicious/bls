@@ -5,6 +5,7 @@ var redis = require('redis');
 var client = redis.createClient();
 var bodyParser = require('body-parser');
 var scraperjs = require('scraperjs');
+var async = require('async');
 
 var app = express();
 
@@ -31,69 +32,54 @@ app.post('/indeed', function(req, res) {
             return {
                 location: city,
                 occupation: occupation,
-                url: 'https://www.indeed.com/salaries/' + occupation.replace(/ /g, "-") + '-Salaries,-' + city.replace(/ /g, "-")
-            };
-            // use regex to look for spaces in occupation and city and replace with dash
+                url: `https://www.indeed.com/salaries/${occupation.replace(/ /g, "-")}-Salaries,-${city.replace(/ /g, "-")}`,
+                data: {}
+            };  // use regex to look for spaces in occupation and city and replace with dash
         });
     });
+    cityAndOccupations = [].concat.apply([], cityAndOccupations);
 
-    // console.log(cityAndOccupations);
-    //
-    // var urls = cityAndOccupations.map( (cityCluster) => {
-    //     return cityCluster.reduce( (occCluster) => {
-    //         return occCluster.url;
-    //     });
-    // });
-
-    var urls = [].concat.apply([], cityAndOccupations.map((cluster) => {
-        return cluster.url;
-    }));
-    console.log(' urls ', urls);
-
-    // var urls = [].concat.apply([], cityAndOccupations); // return a single array of urls
-
-    // check if results are in redis using mget to bundle redis queries -- for dev turn off
-    client.mget(urls, function (err, data) {
-        if (data.indexOf(null) === -1) {
-            console.log('return whole dataset');
-            res.send(data);
-            return;
-        }
-        console.log(data);
-        var responseData;
-        data.forEach( (datum, i) => {
-            // if results are not in redis, fetch from indeed and store in redis
-            if (datum === null) {
-                console.log('run scraper on this ', urls[i]);
-                scraperjs.StaticScraper.create(urls[i])
-                    .scrape(function ($) {
-                        return {
-                            salary: $(".cmp-sal-salary span").map(function() {
-                                return $(this).text();
-                            }).get(),
-                            sample: $(".cmp-salary-header-content").map(function() {
-                                return $(this).text();
-                            }).get(),
-                            relative: $(".cmp-sal-average-above").map(function() {
-                                return $(this).text();
-                            }).get(),
-                            minimum: $(".cmp-sal-min span").first().map(function() {
-                                return $(this).text();
-                            }).get(),
-                            maximum: $(".cmp-sal-max span").first().map(function() {
-                                return $(this).text();
-                            }).get(),
-                        };
-                    })
-                    .then(function (salaryData) {
-                        var newData = JSON.stringify(salaryData);
-                        client.setex(urls[i], 21600, newData);
-                        console.log('set ', urls[i]);
-                        console.log('newData ', newData);
-                    });
-            }
+    // check if results are in redis using mget to bundle redis queries -- for dev turn off or flushdb
+    client.mget(cityAndOccupations.map(cao => cao.url), function (err, data) {
+        cityAndOccupations.forEach( (cityAndOccupation, i) => {
+            cityAndOccupation.data = data[i];
         });
-        res.send(responseData);
+        async.eachOf(cityAndOccupations, (cityAndOccupation, i, callback) => {
+            // if results are in redis, do not fetch again, callback
+            if (cityAndOccupation.data !== null) {
+                callback(null);
+                return;
+            }
+            // if results are NOT in redis, fetch data from Indeed, and then callback
+            scraperjs.StaticScraper.create(cityAndOccupation.url)
+                .scrape(function ($) {
+                    return {
+                        salary: $(".cmp-sal-salary span").map(function() {
+                            return $(this).text();
+                        }).get(),
+                        sample: $(".cmp-salary-header-content").map(function() {
+                            return $(this).text();
+                        }).get(),
+                        relative: $(".cmp-sal-average-above").map(function() {
+                            return $(this).text();
+                        }).get(),
+                        minimum: $(".cmp-sal-min span").first().map(function() {
+                            return $(this).text();
+                        }).get(),
+                        maximum: $(".cmp-sal-max span").first().map(function() {
+                            return $(this).text();
+                        }).get(),
+                    };
+                })
+                .then(function (salaryData) {
+                    cityAndOccupation.data = salaryData;
+                    var redisData = JSON.stringify(salaryData);
+                    client.setex(cityAndOccupation.url, 21600, redisData);
+                    callback(null);
+                });
+        }, () => {
+            res.send(cityAndOccupations);
+        });
     });
     // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-CA
     // https://www.indeed.com/salaries/Software-Engineer-Salaries,-San-Francisco-Bay-Area-CA

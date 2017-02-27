@@ -108,7 +108,8 @@ class Graph extends Component {
                     yAxes: [{
                         stacked: true,
                         ticks: {
-                            beginAtZero:true
+                            beginAtZero:true,
+                            max: 350000
                         },
                     }],
                     xAxes: [{
