@@ -32,18 +32,23 @@ class Graph extends Component {
         this.setState({
             occupation: event.target.value,
         });
-        this.chart.data.datasets[0].data = this.getSalaryData();
-        this.chart.update();
+        // this.chart.data.datasets[0].data = this.getSalaryData();
+        // this.chart.update();
+        this.chart.destroy();
     };
 
     componentDidUpdate = () => {
 
+        console.log('componentDidUpdate-ing here');
         var salaryData = this.getSalaryData();
         var maxData = this.getMaxSalary();
         var minData = this.getMinSalary();
+        var cities = this.props.locations.map( (city) => {
+            return city.split(' ').slice(0,-1).join(" ");
+        });
 
         var data = {
-            labels: this.props.locations,
+            labels: cities,
             datasets: [
                 {
                     type: 'bar',
@@ -83,8 +88,10 @@ class Graph extends Component {
                     type: 'line',
                     label: 'average for ' + this.state.occupation,
                     fill: false,
-                    borderColor: "black",
-                    borderWidth: 1,
+                    borderColor: 'rgba(181,219,45, 1)',
+                    borderWidth: 5,
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
                     data: salaryData,
                 }
             ]
@@ -94,22 +101,34 @@ class Graph extends Component {
             type: 'bar',
             data: data,
             options: {
+                responsive: true,
                 legend: {
                     display: false,
                 },
                 tooltips: {
                     backgroundColor: 'rgba(0,0,0,0.8)',
-                    titleMarginBottom: 10,
-                    bodySpacing: 10,
-                    xPadding: 10,
-                    yPadding: 10,
+                    titleFontSize: 18,
+                    titleMarginBottom: 20,
+                    bodyFontSize: 14,
+                    bodySpacing: 20,
+                    xPadding: 20,
+                    yPadding: 20,
+                    displayColors: true,
                 },
+                // elements: {
+                //     line: {
+                //         borderWidth: 5,
+                //         borderColor: 'rgba(181,219,45, 1)',
+                //         backgroundColor: 'rgba(181,219,45, 1)',
+                //     },
+                // },
                 scales: {
                     yAxes: [{
                         stacked: true,
                         ticks: {
                             beginAtZero:true,
-                            max: 350000
+                            max: 300000,
+                            stepSize: 25000
                         },
                     }],
                     xAxes: [{

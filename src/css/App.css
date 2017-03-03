@@ -68,12 +68,8 @@
     margin: 0 10px;
 }
 
-
 table {
-  width: 80%;
   max-width: 1000px;
-  font-size: 10px;
-  margin: 20px 0;
 }
 
 thead {
@@ -121,15 +117,15 @@ tr:hover {
 }
 
 .title-selection {
-    background: var(--main-color);
+    background: var(--tertiary-color);
     padding: 15px;
     margin: 0 0 20px 0;
 }
 
 #myChart {
-    width: 800px !important;
     height: 500px !important;
-    margin: 0 40px;
+    max-width: 870px !important;
+    /*margin: 0 40px;*/
 }
 
 hr {
@@ -167,7 +163,7 @@ p {
 }
 
 .city-selection {
-    background-color: var(--main-color);
+    background-color: var(--tertiary-color);
     margin: 5px;
 }
 

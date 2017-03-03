@@ -103,7 +103,7 @@ class App extends Component {
 
               <div id="intro">
                   <div className="width">
-                      <h2>Tech Salaries by City</h2>
+                      <h2>Tech Salaries by City and Title</h2>
                       <h3>
                           <i className="fa fa-medium fa-lg" /> Read on <a href="https://medium.com/@joycelin.codes/always-be-coding-regional-differences-in-programming-languages-9957785dd4e6#.oq7bf9wki">Medium</a>
                           <span className="spacer"> | </span>
